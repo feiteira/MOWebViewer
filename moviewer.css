@@ -77,6 +77,15 @@ ul {
 	z-index: 10;	
 }
 
+.copyright {
+	position: fixed;
+	text-align: right;
+	font-size: 0.75em;
+	padding: 8px;	
+	bottom: 0px;
+	right:0px;
+	z-index: 10;	
+}
 
 .comment {
 	border: 3px solid #FFCC00;
