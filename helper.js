@@ -26,6 +26,10 @@ Node.prototype.childrenByTag = function(tag,index=-1){
 	return self.childrenByTag(tag,index)
 }
 
+Node.prototype.isTag = function(tag){
+	var self = this
+	return (self.tagName == tag)
+}
 
 Node.prototype.eachTag = function(tag,func){
 	var self = this
@@ -35,6 +39,8 @@ Node.prototype.eachTag = function(tag,func){
 		})
 	}
 }
+
+
 
 
 // Constants
@@ -59,10 +65,10 @@ LONG_NAMES = {
 		"mal:invokeIP" 	: "Invoke",
 		"mal:progressIP": "Progress",
 		"mal:pubsubIP" 	: "Pub-Sub",
-		//COM
+		// COM
 		"com:events"			: "Events",
-		//"com:objects"			: "Objects",
-		//Others
+		// "com:objects" : "Objects",
+		// Others
 		"mal:dataTypes"			: "Data",
 }
 
@@ -94,12 +100,12 @@ IN_OR_OUT = {
 OMMITED_NODE_TYPES = [ "mal:specification", "mal:capabilitySet",
 	"mal:documentation", "mal:messages", "mal:errors", "com:features",
 	"mal:errorRef",
-	 //"mal:dataTypes",
+	 // "mal:dataTypes",
 	"mal:item","mal:type","mal:extends","mal:field","mal:extraInformation",
 	// IP related
 	"mal:invoke","mal:acknowledgement","mal:response","mal:request","mal:progress","mal:update","mal:submit","mal:publishNotify",
-	//COM related
-	//"com:events",
+	// COM related
+	// "com:events",
 	]
 
 
@@ -128,7 +134,7 @@ TAG_TO_ICON = {
 
 		"mal:dataTypes" 	: "fff/bricks.png",
 		"mal:composite" 	: "fff/brick.png",		
-//COM types
+// COM types
 		"com:events" 	: "fff/page_bell.png",
 		"com:event" 	: "fff/bell.png",
 		"com:object" 	: "fff/database.png",
@@ -193,7 +199,7 @@ function td_with_element(elem){
 
 function td_with_text(text,span = 1) {
 	var cell = document.createElement("td");
-	cell.innerHTML = text
+	cell.innerHTML = text.replace(/\n/g,"\n<br/>")
 	if(span > 1)
 		cell.setAttribute("colspan",span)
 		return cell
@@ -224,7 +230,21 @@ function str_mal_type(type){
 	appendIf("service")
 
 	type_str += type.getAttribute("name")
+	
+	// remove current area
+	if(type.area){
+		var area_prefix = type.area + ":"
+		if(type_str.indexOf(area_prefix) == 0)
+			type_str = type_str.slice(type_str.indexOf(area_prefix)+area_prefix.length)
+	}
 
+	// remove current service
+	if(type.service){
+		var service_prefix = type.service + ":"
+		if(type_str.indexOf(service_prefix) == 0)
+			type_str = type_str.slice(type_str.indexOf(service_prefix)+service_prefix.length)
+	}
+	
 	if(type.getAttribute("list") == "true"){
 		type_str = "List&lt;" + type_str + "&gt; "
 	}
@@ -239,14 +259,16 @@ function str_mal_field(node){
 
 // it returns a function that will hide/show the divs upon mouse hoover
 // it is necessary hack due to variable scope
-// if we were to simply pass the function, then the same 'comment_div_id' variable reference (and others) 
+// if we were to simply pass the function, then the same 'comment_div_id'
+// variable reference (and others)
 // would pushed in (post_draw.push) on all calls
-// this way, the comment_management_function creates a context/scope, and it is that scope that defines the function 
+// this way, the comment_management_function creates a context/scope, and it is
+// that scope that defines the function
 function comment_management_function(trigger_div_id,comment_div_id,reference_position_div_id,relWidth = 1,relHeight = 1){
 	return function(){
 		$('#' + trigger_div_id).on("mouseover", function() {
 			var w =  Math.trunc($('#' + reference_position_div_id).width() * relWidth)
-			var h =  Math.trunc($('#' + reference_position_div_id).height() * relHeight)
+			var h =  Math.trunc($('#' + reference_position_div_id).height() * relHeight)			
 			
 			$('#' + comment_div_id).css('margin-left', w + 'px');
 			$('#' + comment_div_id).css('margin-top', '-' + h + 'px');
@@ -255,8 +277,6 @@ function comment_management_function(trigger_div_id,comment_div_id,reference_pos
 		}).on("mouseout", function() {
 			$('#' + comment_div_id).hide();
 		});
-		
-		
 	}
 }
 
@@ -279,6 +299,8 @@ function onNodeSelect(tree_node) {
 	history.pushState(stateObj, tree_node.path, "index.html?u=" + tree_node.path);
 
 	drawer_func(xml_node);
+	draw_errors(xml_node);
+	draw_comments(xml_node);
 		
 	for(p in post_draw){
 		post_draw[p]()

@@ -12,18 +12,31 @@ function mo_parse(node,lvl = 0,parent_tree_node=null) {
 			var new_node			
 
 			if(parent_tree_node == null){
-				new_node = tree.createNode(name, false, icon_path ,	null, null, null);
-				
+				new_node = tree.createNode(name, false, icon_path ,	null, null, null);				
 			}else{
 				new_node = parent_tree_node.createChildNode(name, false, icon_path,null,null);
 			}
 			
 			new_node.xml_node = node[attr_pos]
+			
 			parent_tree_node = new_node
 		}
 	})
 
 	node.children().each(function() {
+		var xml_node =  $(this)[0]
+		if(xml_node.isTag("mal:area")){
+			xml_node.area = xml_node.getAttribute("name")
+		}
+		xml_node.area = xml_node.area || xml_node.parentNode.area 
+
+		if(xml_node.isTag("mal:service")){
+			xml_node.service = xml_node.getAttribute("name")
+		}
+		xml_node.service = xml_node.service || xml_node.parentNode.service
+		
+		
+		kas = xml_node
 		mo_parse($(this),lvl+1,parent_tree_node)
 	})
 }

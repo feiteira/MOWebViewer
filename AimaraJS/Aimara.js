@@ -140,11 +140,11 @@ function createTree(p_div, p_backColor, p_contextMenu) {
 			this.rendered = true;
 
 			tree_fragment = document.createDocumentFragment();
-			
-//			var div_tree = document.getElementById(this.div);
+
+			// var div_tree = document.getElementById(this.div);
 			var div_tree = document.createElement("div")
 			tree_fragment.appendChild(div_tree)
-			
+
 			div_tree.innerHTML = '';
 			ulElement = createSimpleElement('ul', this.name, 'tree');
 			this.ulElement = ulElement;
@@ -155,7 +155,7 @@ function createTree(p_div, p_backColor, p_contextMenu) {
 
 			div_tree.appendChild(ulElement);
 
-		//	this.adjustLines(div_tree);
+			// this.adjustLines(div_tree);
 		},
 		// /// Drawing the node. This function is used when drawing the Tree and
 		// should not be called directly;
@@ -199,7 +199,7 @@ function createTree(p_div, p_backColor, p_contextMenu) {
 			v_exp_col.onclick = function() {
 				v_tree.toggleNode(p_node);
 			};
-
+			
 			v_span.onclick = function() {
 				v_tree.selectNode(p_node);
 			};
@@ -208,18 +208,19 @@ function createTree(p_div, p_backColor, p_contextMenu) {
 				v_tree.selectNode(p_node);
 				v_tree.nodeContextMenu(e, p_node);
 			};
-			
-			v_span.onmouseover = function(e) {
+
+			var m_onmouseover = function(e) {
 				if (v_tree.mouseOverNodeEvent != undefined)
-					v_tree.mouseOverNodeEvent(p_node);
+					v_tree.mouseOverNodeEvent(p_node, v_span);
 			};
 
-			v_span.onmouseout = function(e) {
+			var m_onmouseout = function(e) {
 				if (v_tree.mouseLeavesNodeEvent != undefined)
 					v_tree.mouseLeavesNodeEvent(p_node);
 			};
 			
-			
+			$(v_span).hover(m_onmouseover, m_onmouseout)
+
 			if (v_icon != undefined)
 				v_span.appendChild(v_icon);
 
@@ -391,16 +392,16 @@ function createTree(p_div, p_backColor, p_contextMenu) {
 		selectNodeFromPath : function(p_node_path) {
 			v_tree = this
 			var tmp_node = v_tree.nodeMap[p_node_path];
-			if(tmp_node != null){
+			if (tmp_node != null) {
 				v_tree.selectNode(tmp_node);
-				var expandie = function(node){
+				var expandie = function(node) {
 					v_tree.expandNode(node);
-					if(node.parent != null)
+					if (node.parent != null)
 						expandie(node.parent);
 				}
 				expandie(tmp_node);
 			}
-			console.info("comparing: " + tmp_node+ " to " + p_node_path);
+			console.info("comparing: " + tmp_node + " to " + p_node_path);
 		},
 		// /// Rendering context menu when mouse right button is pressed over a
 		// node. This function should no be called directly

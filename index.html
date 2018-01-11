@@ -16,22 +16,44 @@
 		div_main = document.getElementById('div_main');
 
 		tree.nodeSelectedEvent = onNodeSelect
-		tree.mouseOverNodeEvent = function(node){
+		tree.mouseOverNodeEvent = function(node, span) {
 			$("#notification_bar").html(node.xml_node.tagName)
+
+			var miniview = $("#div_miniview")
+			$(span).append(miniview)
+
+			if (drawers[node.xml_node.tagName]) {
+				miniview.html("")
+
+				var l = $(span).offset().left + $(span).width();
+				miniview.css('left', l + 'px');
+				miniview.css('top', $(span).offset().top + 'px');
+
+				drawers[node.xml_node.tagName](node.xml_node, miniview[0])
+
+				// hide if there is nothing to show
+				if ($(miniview).html() == "")
+					$(miniview).hide();
+				else
+					$(miniview).fadeIn(200);
+			} else {
+				$(miniview).fadeOut(50);
+				$(document.body).append($(miniview))//moves away from the tree
+			}
 		}
 
-		
-		
+		tree.mouseLeavesNodeEvent = function(node, span) {
+			var miniview = $("#div_miniview")
+			$(miniview).hide()
+			$(document.body).append($(miniview))//moves away from the tree
+		}
+
 		processXMLFile('xml/ServiceDefCOM.xml');
 		processXMLFile('xml/ServiceDefCommon.xml');
 		processXMLFile('xml/ServiceDefMAL.xml');
 		processXMLFile('xml/ServiceDefMC.xml');
 
-		processXMLFile('xml/ServiceDefFBO.mo');
-		
-		processXMLFile('xml/CCSDS_MO_FBO.mo');
-		
-		
+
 		tree.drawTree();
 		div_tree.appendChild(tree_fragment)
 
@@ -48,8 +70,11 @@
 	<div id="div_main" style="width: 67%; float: left;"></div>
 	<div id="notification_bar" class="notificationBar"></div>
 	<div class="copyright">
-		Thanks to <a href="http://www.famfamfam.com/lab/icons/silk/">Fam Fam Fam Silk Icons</a> for the awesome icons.<br/>
-		Copyright: Jos&eacute; Lu&iacute;s F. Feiteirinha 2018
+		Thanks to <a href="http://www.famfamfam.com/lab/icons/silk/">Fam
+			Fam Fam Silk Icons</a> for the awesome icons.<br /> Copyright:
+		Jos&eacute; Lu&iacute;s F. Feiteirinha 2018
 	</div>
+
+	<div id="div_miniview" class="miniview"></div>
 </body>
 </html>

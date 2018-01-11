@@ -1,13 +1,13 @@
-function d_mal_area(node) {
-	var h2 = document.createElement("h2");
-	h2.innerHTML = node.getAttribute("name");
-	div_main.appendChild(h2);
-	if (node.getAttribute("comment") != null) {
-		div_main.innerHTML += node.getAttribute("comment") + "<br/>";
-	}
+function d_mal_area(node,target_div=div_main) {
+//	var h2 = document.createElement("h2");
+//	h2.innerHTML = node.getAttribute("name");
+//	target_div.appendChild(h2);
+//	if (node.getAttribute("comment") != null) {
+//		target_div.innerHTML += node.getAttribute("comment") + "<br/>";
+//	}
 }
 
-function d_mal_composite(node) {
+function d_mal_composite(node,target_div=div_main) {
 	var tbl = document.createElement("table");
 	var tblBody = document.createElement("tbody");
 
@@ -54,8 +54,11 @@ function d_mal_composite(node) {
 											.getAttribute("name")))
 							row.appendChild(td_with_text(str_mal_node_type(f)))
 							row
-									.appendChild(td_with_text(f
-											.getAttribute("canBeNull") == "true" ? "Yes"
+									.appendChild(td_with_text(
+											f.getAttribute("canBeNull") == "true"
+												||
+												f.getAttribute("canBeNull") == null
+												? "Yes"
 											: "No"))
 							var tdl = td_with_text(f.getAttribute("comment"));
 							tdl.style.textAlign = "left";
@@ -70,14 +73,13 @@ function d_mal_composite(node) {
 	}
 
 	tbl.appendChild(tblBody);
-	div_main.appendChild(tbl);
+	target_div.appendChild(tbl);
 
-	div_main.innerHTML += "<br/>"
 
-	draw_comments(node)
+//	draw_comments(node,target_div)
 }
 
-function d_mal_ip(node) {
+function d_mal_ip(node,target_div=div_main) {
 	var tbl = document.createElement("table");
 	var tblBody = document.createElement("tbody");
 
@@ -99,13 +101,10 @@ function d_mal_ip(node) {
 	})
 
 	tbl.appendChild(tblBody);
-	div_main.appendChild(tbl);
+	target_div.appendChild(tbl);
 
-	div_main.innerHTML += "<br/>"
-
-	draw_errors(node)
-
-	draw_comments(node)
+//	draw_errors(node,target_div)
+//	draw_comments(node,target_div)
 }
 
 function d_mal_ip_header(tblBody, id, ip) {
@@ -122,7 +121,7 @@ function d_mal_ip_header(tblBody, id, ip) {
 	tblBody.appendChild(row)
 }
 
-function d_mal_service(node) {
+function d_mal_service(node,target_div=div_main) {
 	var area = node.parentNode
 
 	var tbl = document.createElement("table");
@@ -162,8 +161,6 @@ function d_mal_service(node) {
 		})
 	})
 
-	console.info(operations)
-
 	for (opi in operations) {
 		op = operations[opi]
 
@@ -178,21 +175,21 @@ function d_mal_service(node) {
 	// put the <tbody> in the <table>
 	tbl.appendChild(tblBody);
 
-	div_main.appendChild(tbl);
+	target_div.appendChild(tbl);
 
-	draw_comments(node)
+//	draw_comments(node,target_div)
 
 	// ------------------ Documents ---------------------
 
 	node.eachTag("mal:documentation", function(doc) {
 		var h2 = document.createElement("h2");
 		h2.innerHTML = doc[0].getAttribute("name")
-		div_main.appendChild(h2);
-		div_main.innerHTML += doc[0].textContent;
+		target_div.appendChild(h2);
+		target_div.innerHTML += doc[0].textContent;
 	})
 }
 
-function d_mal_enum(node) {
+function d_mal_enum(node,target_div=div_main) {
 	var tbl = document.createElement("table");
 	var tblBody = document.createElement("tbody");
 	var row
@@ -226,23 +223,23 @@ function d_mal_enum(node) {
 	// put the <tbody> in the <table>
 	tbl.appendChild(tblBody);
 
-	div_main.appendChild(tbl);
+	target_div.appendChild(tbl);
 
-	draw_comments(node)
+//	draw_comments(node,target_div)
 }
 
-function d_mal_documentation(node) {
-	default_drawer(node)
+function d_mal_documentation(node,target_div=div_main) {
+	default_drawer(node,target_div)
 }
 
-function default_drawer(xml_node) {
-	draw_table(xml_node)
-	draw_comments(xml_node)
+function default_drawer(node,target_div=div_main) {
+	draw_table(node,target_div)
+//	draw_comments(node,target_div)
 }
 
-function draw_table(xml_node) {
-	var keys = xml_node.getAttributeNames()
-	var comment = xml_node.getAttribute("comment")
+function draw_table(node,target_div=div_main) {
+	var keys = node.getAttributeNames()
+	var comment = node.getAttribute("comment")
 
 	if (typeof comment != 'undefined' && comment != null) {
 		var index = keys.indexOf("comment")
@@ -250,7 +247,7 @@ function draw_table(xml_node) {
 	}
 
 	var elements = keys.map(function(k) {
-		return xml_node.getAttribute(k)
+		return node.getAttribute(k)
 	})
 
 	var tbl = document.createElement("table");
@@ -266,10 +263,14 @@ function draw_table(xml_node) {
 	// put the <tbody> in the <table>
 	tbl.appendChild(tblBody);
 
-	div_main.appendChild(tbl);
+	target_div.appendChild(tbl);
 }
 
-function tr_mal_message(node) {
+function tr_mal_message(node,target_div=div_main, unique_sufix = null) {
+	if(!unique_sufix){
+		unique_sufix  = new Date() * Math.ceil((Math.random()*1000000))
+	}
+	
 	var row = document.createElement("tr");
 	var tag = node.tagName
 	row.appendChild(gray_td_with_text(IN_OR_OUT[tag]))
@@ -294,9 +295,9 @@ function tr_mal_message(node) {
 				&& field.getAttribute("comment") != "") {
 			// on hover comment
 			var comment_div = document.createElement("div");
-			var comment_div_id = "comment_" + field.getAttribute("name")
-			var comment_li_id = "li_" + field.getAttribute("name")
-			var elem_name_div_id = "elem_name_" + field.getAttribute("name")
+			var comment_div_id = "comment_" + field.getAttribute("name") + unique_sufix
+			var comment_li_id = "li_" + field.getAttribute("name") + unique_sufix
+			var elem_name_div_id = "elem_name_" + field.getAttribute("name") + unique_sufix
 
 			li.setAttribute("id", comment_li_id)
 			comment_div.setAttribute("id", comment_div_id);
@@ -327,7 +328,7 @@ function tr_mal_message(node) {
 	return row
 }
 
-function draw_errors(node) {
+function draw_errors(node,target_div=div_main) {
 	// check if errors entry exists, if not, then exit
 	if (node.childrenByTag("mal:errors", 0) == null) {
 		return
@@ -340,7 +341,7 @@ function draw_errors(node) {
 	if (errorsNode.childrenByTag("mal:errorRef", 0)) {
 		var h2 = document.createElement("h2");
 		h2.innerHTML = "Errors";
-		div_main.appendChild(h2);
+		target_div.appendChild(h2);
 
 		// ------------------ first blue header ------------------
 		var tbl = document.createElement("table");
@@ -352,18 +353,16 @@ function draw_errors(node) {
 
 		errorsNode.eachTag("mal:errorRef", function(err) {
 			// errors
-
 			tblBody.appendChild(tr_errorRef(err))
-
 		})
 		// put the <tbody> in the <table>
 		tbl.appendChild(tblBody);
-		div_main.appendChild(tbl);
+		target_div.appendChild(tbl);
 
 	}
 }
 
-function tr_errorRef(node) {
+function tr_errorRef(node,target_div=div_main) {
 	var row = document.createElement("tr");
 
 	// ------------- error type
@@ -372,11 +371,8 @@ function tr_errorRef(node) {
 	// ------------- comment
 	var comment = node.getAttribute("comment")
 	if (typeof comment != 'undefined' && comment != null) {
-		var unique = str_mal_node_type(node).replace(":", "_").replace("<", "_")
-		.replace(">", "_")
 
-		row.appendChild(td_table_comment(node.getAttribute("comment"),
-		unique))
+		row.appendChild(td_table_comment(node.getAttribute("comment")))
 
 		//row.appendChild(td_with_text(comment))
 	} else {
@@ -443,14 +439,14 @@ function td_table_comment(full_comment, unique_sufix = null) {
 	return td
 }
 
-function draw_comments(node) {
+function draw_comments(node,target_div=div_main) {
 	var comment = node.getAttribute("comment")
 	if (typeof comment != 'undefined' && comment != null) {
 		var h2 = document.createElement("h2");
 		h2.innerHTML = "Comment";
 
-		div_main.appendChild(h2);
-		div_main.innerHTML += comment + "<br/>";
+		target_div.appendChild(h2);
+		target_div.innerHTML += comment + "<br/>";
 	}
 
 	var note_counter = 1
@@ -458,15 +454,14 @@ function draw_comments(node) {
 		var h3 = document.createElement("h3");
 		h3.innerHTML = "Note " + note_counter;
 
-		div_main.appendChild(h3);
-		div_main.innerHTML += ei.getAttribute("comment") + "<br/>";
+		target_div.appendChild(h3);
+		target_div.innerHTML += ei.getAttribute("comment") + "<br/>";
 		note_counter++
 	})
 }
 
 drawers = {}
 
-drawers["mal:documentation"] = d_mal_documentation
 drawers["mal:area"] = d_mal_area
 drawers["mal:service"] = d_mal_service
 
@@ -481,3 +476,5 @@ drawers["mal:enumeration"] = d_mal_enum
 
 drawers["mal:composite"] = d_mal_composite
 drawers["default"] = default_drawer
+
+drawers["mal:documentation"] = d_mal_documentation
