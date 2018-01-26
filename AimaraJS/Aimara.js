@@ -401,7 +401,6 @@ function createTree(p_div, p_backColor, p_contextMenu) {
 				}
 				expandie(tmp_node);
 			}
-			console.info("comparing: " + tmp_node + " to " + p_node_path);
 		},
 		// /// Rendering context menu when mouse right button is pressed over a
 		// node. This function should no be called directly

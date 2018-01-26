@@ -41,7 +41,6 @@ ul {
 
 
 .link:hover {
-    font-style: italic;
 	background-color: #DDFF99;
 }
 
@@ -50,6 +49,13 @@ ul {
   	text-decoration-line: underline;
 	text-decoration-style: dashed;	
 	text-decoration-color: #008fb3;
+}
+
+.error {
+/*	color: #004C5F;*/
+  	text-decoration-line: underline;
+	text-decoration-style: wavy;	
+	text-decoration-color: #8f0000;
 }
 
 

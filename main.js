@@ -1,5 +1,7 @@
 //counter = 0
-function mo_parse(node,lvl = 0,parent_tree_node=null) {
+function mo_parse(node,lvl,parent_tree_node) {	
+	lvl = lvl || 0
+	parent_tree_node = parent_tree_node || null
 	var prfx = ". ".repeat(lvl);
 
 	// should always be true, but just in case, for each node entry
@@ -18,6 +20,7 @@ function mo_parse(node,lvl = 0,parent_tree_node=null) {
 			}
 			
 			new_node.xml_node = node[attr_pos]
+			new_node.xml_node.tree_node =new_node // points back to tree 
 			
 			parent_tree_node = new_node
 		}
