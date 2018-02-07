@@ -23,6 +23,8 @@ function mo_parse(node,lvl,parent_tree_node) {
 			new_node.xml_node.tree_node =new_node // points back to tree 
 			
 			parent_tree_node = new_node
+			
+			tree.nameMap[name] = new_node
 		}
 	})
 
@@ -38,13 +40,13 @@ function mo_parse(node,lvl,parent_tree_node) {
 		}
 		xml_node.service = xml_node.service || xml_node.parentNode.service
 		
-		
-		kas = xml_node
 		mo_parse($(this),lvl+1,parent_tree_node)
 	})
 }
 
 function processXMLFile(filepath) {
+	tree.nameMap = tree.nameMap || {};
+	
 // console.info("loading " + filepath);
 	jQuery.ajaxSetup({async:false});
 

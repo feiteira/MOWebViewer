@@ -61,6 +61,8 @@ ENUM_LIST_HEADER = [ "Enumeration Value", "Numerical Value", "Comment" ]
 
 ERROR_HEADER = [ "Error", "Comment", "Extra Info - Type", "Extra Info - Comment" ]
 
+COM_OBJECT_HEADER = [ "Object Name", "Object Number", "Object Body Type", "Related points to", "Source points to" ]
+
 LONG_NAMES = {
 	"mal:errors" : "Errors",
 	// interaction patterns
@@ -227,6 +229,14 @@ function str_mal_node_type(node, path_prefix) {
 }
 
 function str_mal_type(type, path_prefix) {
+	return str_type(type,path_prefix,"name")
+}
+function str_com_type(type, path_prefix) {
+	return str_type(type,path_prefix,"number")
+}
+
+
+function str_type(type, path_prefix,id_type) {
 	path_prefix = (typeof path_prefix == 'undefined') ? "Data/" : path_prefix
 	var type_annotation = document.createElement("a")
 	var type_str = ""
@@ -242,8 +252,8 @@ function str_mal_type(type, path_prefix) {
 	appendIf("area")
 	appendIf("service")
 
-	type_str += type.getAttribute("name")
-	path_str += path_prefix + type.getAttribute("name")
+	type_str += type.getAttribute(id_type)
+	path_str += path_prefix + type.getAttribute(id_type)
 
 	// remove current area from type
 	if (type.area) {
@@ -282,7 +292,7 @@ function str_mal_type(type, path_prefix) {
 				tree.selectNodeFromPath(path_str)
 			})
 		}else{
-			t_ann.addClass("error")
+		//	t_ann.addClass("error")
 		}
 	})
 

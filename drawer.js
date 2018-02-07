@@ -101,6 +101,69 @@ function d_mal_ip_header(tblBody, id, ip) {
 	tblBody.appendChild(row)
 }
 
+function tr_mal_message(node, target_div, unique_sufix) {
+	target_div = target_div || div_main
+	unique_sufix = unique_sufix || gen_suffix()
+
+	var row = document.createElement("tr");
+	var tag = node.tagName
+	row.appendChild(gray_td_with_text(IN_OR_OUT[tag]))
+	row.appendChild(gray_td_with_text(MESSAGE_NAMES[tag]))
+
+	var td = td_with_text("")
+
+	var ul = document.createElement("ul");
+
+	// a field has a name and a type
+
+	for (f in node.childrenByTag("mal:field")) {
+		field = node.childrenByTag("mal:field")[f]
+
+		var li = document.createElement("li");
+		li.innerHTML = str_mal_node_type(field)// str_mal_field(field)
+		li.innerHTML += " "
+
+		var elem_name = document.createElement("a");
+
+		elem_name.innerHTML = field.getAttribute("name")
+		li.appendChild(elem_name)
+
+		// comments view
+		if (field.getAttribute("comment") && field.getAttribute("comment") != "") {
+			// on hover comment
+			var comment_div = document.createElement("div");
+			var comment_div_id = "comment_" + field.getAttribute("name") + unique_sufix
+			var comment_li_id = "li_" + field.getAttribute("name") + unique_sufix
+			var elem_name_div_id = "elem_name_" + field.getAttribute("name") + unique_sufix
+
+			li.setAttribute("id", comment_li_id)
+			comment_div.setAttribute("id", comment_div_id);
+			elem_name.setAttribute("id", elem_name_div_id);
+			elem_name.setAttribute("class", "note");
+
+			comment_div.setAttribute("class", "comment");
+			comment_div.innerHTML = field.getAttribute("comment")
+			li.appendChild(comment_div)
+
+			post_draw.push(comment_management_function(elem_name_div_id, comment_div_id, comment_li_id))
+		}
+		ul.appendChild(li)
+	}
+
+	// only a field not the type
+	node.eachTag("mal:type", function(type) {
+		var li = document.createElement("li");
+		li.innerHTML = str_mal_type(type)
+		ul.appendChild(li)
+
+	})
+
+	td.appendChild(ul)
+	row.appendChild(td)
+
+	return row
+}
+
 function d_mal_service(node, target_div) {
 	target_div = target_div || div_main
 	var area = node.parentNode
@@ -156,6 +219,7 @@ function d_mal_service(node, target_div) {
 		var operationCell = tRow.cells[1]
 
 		operationCell.setAttribute("id", gen_suffix())
+		operationCell.setAttribute("class", "link")
 
 		// on hover of the cell, show mini view of the operation
 		// on click, go there
@@ -179,7 +243,7 @@ function d_mal_service(node, target_div) {
 	}
 
 	// merge capabilitySets
-	//iterates throw the cells, if the capability set matches with the previous
+	// iterates throw the cells, if the capability set matches with the previous
 	// then it deletes the cell and increments the row span of the previous
 	var prevCapSetCell = null
 	for (var r = 0, row; row = tblBody.rows[r]; r++) {
@@ -237,10 +301,63 @@ function d_mal_enum(node, target_div) {
 
 	// put the <tbody> in the <table>
 	tbl.appendChild(tblBody);
-
 	target_div.appendChild(tbl);
+}
 
-	// draw_comments(node,target_div)
+function d_com_objects(node, target_div) {
+	target_div = target_div || div_main
+
+	var tbl = document.createElement("table");
+	var tblBody = document.createElement("tbody");
+	var header_row = tableRow(COM_OBJECT_HEADER);
+	header_row.setAttribute("class", "blue_bg");
+
+	tblBody.appendChild(header_row)
+
+	var row
+
+	node.eachTag("com:object", function(obj) {
+		row = document.createElement("tr");
+		row.appendChild(td_with_text(obj.getAttribute("name")))
+		row.appendChild(td_with_text(obj.getAttribute("number")))
+
+		// object body type
+		var obj_body_type
+		if (obj.childrenByTag("com:objectType")) {
+			obj_body_type = str_mal_type(obj.childrenByTag("com:objectType")[0].childrenByTag("mal:type")[0])
+		} else {
+			obj_body_type = "No body"
+		}
+		row.appendChild(td_with_text(obj_body_type))
+
+		// related & source
+		var handle_obj_ref = function(typeTag) {
+			console.info(this)
+			console.info(typeTag)
+
+			var refText
+			if (this.childrenByTag(typeTag)) {
+				var objType = this.childrenByTag(typeTag)[0].childrenByTag("com:objectType")
+				// there is a defind type
+				if (objType) {
+					refText = str_com_type(objType[0])
+				} else {
+					refText = this.childrenByTag(typeTag)[0].getAttribute("comment")
+				}
+			} else {
+				refText = "Set to NULL"
+			}
+			return td_with_text(refText)
+		}
+
+		row.appendChild(handle_obj_ref.bind(obj)("com:relatedObject"))
+		row.appendChild(handle_obj_ref.bind(obj)("com:sourceObject"))
+
+		tblBody.appendChild(row)
+	})
+
+	tbl.appendChild(tblBody);
+	target_div.appendChild(tbl);
 }
 
 function default_drawer(node, target_div) {
@@ -267,6 +384,12 @@ function draw_table(node, target_div) {
 	if (elements.length == 0) {
 		return
 
+		
+
+				
+
+		
+
 	}
 
 	var tbl = document.createElement("table");
@@ -285,73 +408,17 @@ function draw_table(node, target_div) {
 	target_div.appendChild(tbl);
 }
 
-function tr_mal_message(node, target_div, unique_sufix) {
-	target_div = target_div || div_main
-	unique_sufix = unique_sufix || gen_suffix()
-
-	var row = document.createElement("tr");
-	var tag = node.tagName
-	row.appendChild(gray_td_with_text(IN_OR_OUT[tag]))
-	row.appendChild(gray_td_with_text(MESSAGE_NAMES[tag]))
-
-	var td = td_with_text("")
-
-	var ul = document.createElement("ul");
-
-	// a field has a name and a type
-
-	for (f in node.childrenByTag("mal:field")) {
-		field = node.childrenByTag("mal:field")[f]
-
-		var li = document.createElement("li");
-		li.innerHTML = str_mal_node_type(field)// str_mal_field(field)
-		li.innerHTML += " "
-
-		var elem_name = document.createElement("a");
-		elem_name.innerHTML = field.getAttribute("name")
-		li.appendChild(elem_name)
-
-		// comments view
-		if (field.getAttribute("comment") && field.getAttribute("comment") != "") {
-			// on hover comment
-			var comment_div = document.createElement("div");
-			var comment_div_id = "comment_" + field.getAttribute("name") + unique_sufix
-			var comment_li_id = "li_" + field.getAttribute("name") + unique_sufix
-			var elem_name_div_id = "elem_name_" + field.getAttribute("name") + unique_sufix
-
-			li.setAttribute("id", comment_li_id)
-			comment_div.setAttribute("id", comment_div_id);
-			elem_name.setAttribute("id", elem_name_div_id);
-			elem_name.setAttribute("class", "note");
-
-			comment_div.setAttribute("class", "comment");
-			comment_div.innerHTML = field.getAttribute("comment")
-			li.appendChild(comment_div)
-
-			post_draw.push(comment_management_function(elem_name_div_id, comment_div_id, comment_li_id))
-		}
-		ul.appendChild(li)
-	}
-
-	// only a field not the type
-	node.eachTag("mal:type", function(type) {
-		var li = document.createElement("li");
-		li.innerHTML = str_mal_type(type)
-		ul.appendChild(li)
-
-	})
-
-	td.appendChild(ul)
-	row.appendChild(td)
-
-	return row
-}
-
 function draw_errors(node, target_div) {
 	target_div = target_div || div_main
 	// check if errors entry exists, if not, then exit
 	if (node.childrenByTag("mal:errors", 0) == null) {
 		return
+
+		
+
+				
+
+		
 
 	}
 
@@ -399,7 +466,7 @@ function tr_errorRef(node, target_div) {
 	var row = document.createElement("tr");
 
 	// ------------- error type
-	row.appendChild(td_with_text(str_mal_node_type(node,"")))
+	row.appendChild(td_with_text(str_mal_node_type(node, "")))
 
 	// ------------- comment
 	var comment = node.getAttribute("comment")
@@ -504,3 +571,5 @@ drawers["mal:pubsubIP"] = d_mal_ip
 drawers["mal:enumeration"] = d_mal_enum
 
 drawers["mal:composite"] = d_mal_composite
+
+drawers["com:objects"] = d_com_objects

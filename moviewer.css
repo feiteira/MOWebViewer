@@ -42,6 +42,7 @@ ul {
 
 .link:hover {
 	background-color: #DDFF99;
+	cursor: pointer;
 }
 
 .note {
@@ -49,6 +50,7 @@ ul {
   	text-decoration-line: underline;
 	text-decoration-style: dashed;	
 	text-decoration-color: #008fb3;
+	cursor: pointer;	
 }
 
 .error {
