@@ -118,6 +118,7 @@ ul {
 	left:0px;
 	width: 100%;
 	z-index: 10;
+	pointer-events: none;
 }
 
 .copyright {
