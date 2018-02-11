@@ -14,15 +14,15 @@ table {
 }
 
 h2 {
-    font-size: 1.3em;
-    margin-top: 0.83em;
-    margin-bottom: 0.2em;
+	font-size: 1.3em;
+	margin-top: 0.83em;
+	margin-bottom: 0.2em;
 }
 
 h3 { 
-    font-size: 1.1em;
-    margin-top: 0.5em;
-    margin-bottom: 0.2em;
+	font-size: 1.1em;
+	margin-top: 0.5em;
+	margin-bottom: 0.2em;
 }
 
 td {
@@ -47,7 +47,7 @@ ul {
 
 .note {
 /*	color: #004C5F;*/
-  	text-decoration-line: underline;
+	text-decoration-line: underline;
 	text-decoration-style: dashed;	
 	text-decoration-color: #008fb3;
 	cursor: pointer;	
@@ -55,7 +55,7 @@ ul {
 
 .error {
 /*	color: #004C5F;*/
-  	text-decoration-line: underline;
+	text-decoration-line: underline;
 	text-decoration-style: wavy;	
 	text-decoration-color: #8f0000;
 }
