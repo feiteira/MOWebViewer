@@ -36,6 +36,16 @@ ul {
 	margin-bottom: 0
 }
 
+#div_tree {
+	width: 33%;
+	float: left;
+}
+
+#div_main {
+	width: 67%;
+	float: left;
+}
+
 .link {
 }
 
