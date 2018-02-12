@@ -134,6 +134,7 @@ ul {
 
 .miniview {
 	border: 3px solid #CCCCCC;
+	color: #000000;
 	background-color: #FFFFFF;
 	position: absolute;
 	text-align: left;
