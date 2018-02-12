@@ -35,7 +35,7 @@ td {
 ul {
 	list-style-type: none;
 	padding: 0;
-	margin-bottom: 0
+	margin: 0
 }
 
 #mainContainer {
@@ -134,6 +134,7 @@ ul {
 
 .miniview {
 	border: 3px solid #CCCCCC;
+	color: #000000;
 	background-color: #FFFFFF;
 	position: absolute;
 	text-align: left;
