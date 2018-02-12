@@ -55,5 +55,39 @@ function processXMLFile(filepath) {
 	})
 }
 
-//$(window).on('load', function () {
-//})
+function loadMoSpecs() {
+	for (var key in configServiceDefFiles) {
+		processXMLFile(configServiceDefFiles[key]);
+	}
+}
+
+window.onload = function() {
+	tree = createTree('div_tree', 'white', null);
+	div_tree = document.getElementById('div_tree');
+	div_main = document.getElementById('div_main');
+
+	tree.nodeSelectedEvent = onNodeSelect
+
+	tree.mouseOverNodeEvent 	= function (node, span) {hoverInToMiniview(node.xml_node,span) }
+	tree.mouseLeavesNodeEvent	= function (node, span) {hoverOutOfMiniview(node.xml_node,span) }
+
+	loadMoSpecs();
+
+	tree.drawTree();
+	div_tree.appendChild(tree_fragment)
+
+	var urlSearch = new URLSearchParams(location.search);
+	if (typeof urlSearch.get("u") != 'undefined') {
+		tree.selectNodeFromPath(urlSearch.get("u"));
+	}
+
+}
+
+$(window).on("popstate", function(e) {
+	var urlSearch = new URLSearchParams(location.search);
+	if (typeof urlSearch.get("u") != 'undefined') {
+		console.info(urlSearch.get("u"))
+		tree.selectNodeFromPath(urlSearch.get("u"));
+	}
+
+})
