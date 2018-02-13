@@ -2,13 +2,18 @@
 function mo_parse(node,lvl,parent_tree_node) {	
 	lvl = lvl || 0
 	parent_tree_node = parent_tree_node || null
-	var prfx = ". ".repeat(lvl);
+	// String.prototype.repeat() is not used below for IE compatibility
+	var prfx = "";
+	while (lvl-- > 0)
+	{
+		prfx += ". "
+	}
 
 	// should always be true, but just in case, for each node entry
 	if (node.length > 0) node.map(function(attr_pos) {		
 		// skip from the tree
-		if(!OMMITED_NODE_TYPES.includes(node[attr_pos].tagName)
-		){
+		// Array.prototype.includes() is not used below for IE compatibility
+		if(OMMITED_NODE_TYPES.indexOf(node[attr_pos].tagName) === -1) {
 			var name = treeElementName(node[attr_pos])
 			var icon_path = iconPath(node[attr_pos].tagName)
 			var new_node			

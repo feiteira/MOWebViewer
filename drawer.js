@@ -75,8 +75,9 @@ function d_mal_ip(node, target_div) {
 
 	// messages, assumes only one message entry
 	node.eachTag("mal:messages", function(msg) {
-		$(msg).children().each(function(c) {
-			tblBody.appendChild(tr_mal_message(msg.children[c]))
+		var msgChildren = $(msg).children()
+		msgChildren.each(function(c) {
+			tblBody.appendChild(tr_mal_message(msgChildren[c]))
 		})
 	})
 
@@ -194,8 +195,9 @@ function d_mal_service(node, target_div) {
 	var operations = []
 	// list of operations independently of capability set
 	node.eachTag("mal:capabilitySet", function(cs) {
-		$(cs).children().each(function(idx) {
-			var ip = cs.children[idx]
+		var csChildren = $(cs).children();
+		csChildren.each(function(idx) {
+			var ip = csChildren[idx]
 			if (typeof ip != 'undefined') {
 				// updates list of all operations on parent node
 				if (ip.tagName.match(/mal:.*IP/)) {
