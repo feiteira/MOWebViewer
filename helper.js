@@ -373,6 +373,16 @@ function gen_suffix() {
 	return (new Date() * Math.ceil((Math.random() * 1000000)))
 }
 
+/**
+	This function is used instead of URLSearchParams.get() for IE compatibility.
+*/
+function getUrlParameter(name) {
+	name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+	var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+	var results = regex.exec(location.search);
+	return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+};
+
 // --------------------- AimaraJS extentions ------------------------
 
 function onNodeSelect(tree_node) {
@@ -387,8 +397,8 @@ function onNodeSelect(tree_node) {
 	if (typeof drawer_func == 'undefined')
 		drawer_func = drawers["default"]
 
-	var urlSearch = new URLSearchParams(location.search);
-	if (typeof urlSearch.get("u") != 'undefined' &&  urlSearch.get("u") != tree_node.path) {
+	var nodePath = getUrlParameter("u");
+	if (typeof nodePath !== "undefined" && nodePath !== tree_node.path) {
 		var stateObj = {};
 		history.pushState(stateObj, tree_node.path, "?u=" + tree_node.path);
 	}

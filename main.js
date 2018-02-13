@@ -61,6 +61,13 @@ function loadMoSpecs() {
 	}
 }
 
+function selectNodeFromURL() {
+	var nodePath = getUrlParameter("u");
+	if (typeof nodePath !== "undefined") {
+		tree.selectNodeFromPath(nodePath);
+	}
+}
+
 window.onload = function() {
 	tree = createTree('div_tree', 'white', null);
 	div_tree = document.getElementById('div_tree');
@@ -76,18 +83,9 @@ window.onload = function() {
 	tree.drawTree();
 	div_tree.appendChild(tree_fragment)
 
-	var urlSearch = new URLSearchParams(location.search);
-	if (typeof urlSearch.get("u") != 'undefined') {
-		tree.selectNodeFromPath(urlSearch.get("u"));
-	}
-
+	selectNodeFromURL();
 }
 
 $(window).on("popstate", function(e) {
-	var urlSearch = new URLSearchParams(location.search);
-	if (typeof urlSearch.get("u") != 'undefined') {
-		console.info(urlSearch.get("u"))
-		tree.selectNodeFromPath(urlSearch.get("u"));
-	}
-
+	selectNodeFromURL();
 })
