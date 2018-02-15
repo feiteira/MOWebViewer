@@ -24,9 +24,10 @@ Node.prototype.childrenByTag = function(tag, index) {
 
 	// if here, then initiate the map
 	self.tagMap = {}
-	$(self).children().each(function(c) {
-		self.tagMap[self.children[c].tagName] = self.tagMap[self.children[c].tagName] || []
-		self.tagMap[self.children[c].tagName].push(self.children[c])
+	var children = $(self).children();
+	children.each(function(c) {
+		self.tagMap[children[c].tagName] = self.tagMap[children[c].tagName] || []
+		self.tagMap[children[c].tagName].push(children[c])
 	})
 
 	// now we're sure the map has been initiated
@@ -174,7 +175,8 @@ function treeElementTag(element) {
 
 	// shows only node name, but not the type (e.g. 'mal:area' will never be
 	// shown)
-	if (OMMITED_TYPE_NAME_IN_TREE.includes(tag)) {
+	// Array.prototype.includes() is not used below for IE compatibility
+	if (OMMITED_TYPE_NAME_IN_TREE.indexOf(tag) !== -1) {
 		tag = null
 	} else if (tag in LONG_NAMES) {
 		tag = LONG_NAMES[tag]
@@ -225,7 +227,7 @@ function gray_td_with_text(text, span) {
 }
 
 function str_mal_node_type(node, path_prefix) {
-	return str_mal_type(node.children[0], path_prefix)
+	return str_mal_type($(node).children()[0], path_prefix)
 }
 
 function str_mal_type(type, path_prefix) {
@@ -373,6 +375,16 @@ function gen_suffix() {
 	return (new Date() * Math.ceil((Math.random() * 1000000)))
 }
 
+/**
+	This function is used instead of URLSearchParams.get() for IE compatibility.
+*/
+function getUrlParameter(name) {
+	name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+	var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+	var results = regex.exec(location.search);
+	return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+};
+
 // --------------------- AimaraJS extentions ------------------------
 
 function onNodeSelect(tree_node) {
@@ -387,8 +399,8 @@ function onNodeSelect(tree_node) {
 	if (typeof drawer_func == 'undefined')
 		drawer_func = drawers["default"]
 
-	var urlSearch = new URLSearchParams(location.search);
-	if (typeof urlSearch.get("u") != 'undefined' &&  urlSearch.get("u") != tree_node.path) {
+	var nodePath = getUrlParameter("u");
+	if (typeof nodePath !== "undefined" && nodePath !== tree_node.path) {
 		var stateObj = {};
 		history.pushState(stateObj, tree_node.path, "?u=" + tree_node.path);
 	}
