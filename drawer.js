@@ -178,7 +178,7 @@ function d_mal_service(node, target_div) {
 	tblBody.appendChild(header_row)
 
 	out = node
-	tblBody.appendChild(tableRow([// 
+	tblBody.appendChild(tableRow([//
 	area.getAttribute("name"), // area identifier
 	node.getAttribute("name"), // service identifier
 	area.getAttribute("number"), // area number
@@ -212,7 +212,7 @@ function d_mal_service(node, target_div) {
 		op = operations[opi]
 
 		var tRow = tableRow([//
-		LONG_NAMES[op[0].tagName],// 
+		LONG_NAMES[op[0].tagName],//
 		op[0].getAttribute("name"),//
 		op[0].getAttribute("number"), // area
 		op[0].getAttribute("supportInReplay"), op[0].parentNode.getAttribute("number") ])
@@ -306,7 +306,11 @@ function d_mal_enum(node, target_div) {
 	target_div.appendChild(tbl);
 }
 
-function d_com_objects(node, target_div) {
+function d_com_events(node, target_div,object_tag = "com:event") {
+	d_com_objects(node, target_div,object_tag);
+}
+
+function d_com_objects(node, target_div,object_tag = "com:object") {
 	target_div = target_div || div_main
 
 	var tbl = document.createElement("table");
@@ -318,7 +322,7 @@ function d_com_objects(node, target_div) {
 
 	var row
 
-	node.eachTag("com:object", function(obj) {
+	node.eachTag(object_tag, function(obj) {
 		row = document.createElement("tr");
 		row.appendChild(td_with_text(obj.getAttribute("name")))
 		row.appendChild(td_with_text(obj.getAttribute("number")))
@@ -386,11 +390,11 @@ function draw_table(node, target_div) {
 	if (elements.length == 0) {
 		return
 
-		
 
-				
 
-		
+
+
+
 
 	}
 
@@ -416,11 +420,11 @@ function draw_errors(node, target_div) {
 	if (node.childrenByTag("mal:errors", 0) == null) {
 		return
 
-		
 
-				
 
-		
+
+
+
 
 	}
 
@@ -575,3 +579,4 @@ drawers["mal:enumeration"] = d_mal_enum
 drawers["mal:composite"] = d_mal_composite
 
 drawers["com:objects"] = d_com_objects
+drawers["com:events"] = d_com_events

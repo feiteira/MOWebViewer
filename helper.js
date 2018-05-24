@@ -75,7 +75,7 @@ LONG_NAMES = {
 	"mal:pubsubIP" : "Pub-Sub",
 	// COM
 	"com:events" : "Events",
-	// "com:objects" : "Objects",
+	"com:objects" : "Objects",
 	// Others
 	"mal:dataTypes" : "Data",
 
@@ -114,9 +114,10 @@ OMMITED_NODE_TYPES = [ "mal:specification", "mal:capabilitySet", "mal:documentat
 		"mal:item", "mal:type", "mal:extends", "mal:field", "mal:extraInformation",
 		// IP related
 		"mal:invoke", "mal:acknowledgement", "mal:response", "mal:request", "mal:progress", "mal:update", "mal:submit",
-		"mal:publishNotify",
+		"mal:publishNotify"
 // COM related
-// "com:events",
+ ,"com:object","com:event"
+ ,"com:objectType","com:sourceObject","com:relatedObject"
 ]
 
 OMMITED_TYPE_NAME_IN_TREE = [ "mal:area", "mal:service", "mal:composite", "mal:error", ]
@@ -404,7 +405,7 @@ function onNodeSelect(tree_node) {
 		var stateObj = {};
 		history.pushState(stateObj, tree_node.path, "?u=" + tree_node.path);
 	}
-	
+
 	drawer_func(xml_node);
 	draw_errors(xml_node);
 	draw_documentation(xml_node);
