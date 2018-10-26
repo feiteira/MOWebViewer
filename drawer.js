@@ -90,6 +90,11 @@ function d_mal_composite(node, target_div) {
 		row.appendChild(blue_td_with_text("Short Form Part"))
 		row.appendChild(td_with_text(node.getAttribute("shortFormPart"), 3))
 		tblBody.appendChild(row)
+	} else {
+		// Abstract
+		var row = document.createElement("tr");
+		row.appendChild(blue_td_with_text("Abstract", 4))
+		tblBody.appendChild(row)
 	}
 
 	// fields
@@ -110,11 +115,6 @@ function d_mal_composite(node, target_div) {
 					row.appendChild(tdl)
 					tblBody.appendChild(row)
 				})
-	} else {
-		// Abstract
-		var row = document.createElement("tr");
-		row.appendChild(blue_td_with_text("Abstract", 4))
-		tblBody.appendChild(row)
 	}
 
 	tbl.appendChild(tblBody);
