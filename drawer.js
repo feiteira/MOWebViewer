@@ -1,3 +1,65 @@
+function d_mal_fundamental(node, target_div) {
+	target_div = target_div || div_main
+	var tbl = document.createElement("table");
+	var tblBody = document.createElement("tbody");
+
+	// Name
+	var row = document.createElement("tr");
+	row.appendChild(blue_td_with_text("Name"))
+	row.appendChild(td_with_text(node.getAttribute("name"), 3))
+	tblBody.appendChild(row)
+
+	// Extends
+	row = document.createElement("tr");
+	row.appendChild(blue_td_with_text("Extends"))
+	if (node.childrenByTag("mal:extends")) {
+		var super_type = node.childrenByTag("mal:extends")[0]// there only
+		// one entry in
+		// extends
+		row.appendChild(td_with_text(str_mal_node_type(super_type), 3))
+	} else {
+		row.appendChild(td_with_text("", 3))
+	}
+	tblBody.appendChild(row)
+
+	// Fundamentals are always abstract
+	var row = document.createElement("tr");
+	row.appendChild(blue_td_with_text("Abstract", 4))
+	tblBody.appendChild(row)
+
+	tbl.appendChild(tblBody);
+	target_div.appendChild(tbl);
+}
+
+function d_mal_attribute(node, target_div) {
+	target_div = target_div || div_main
+	var tbl = document.createElement("table");
+	var tblBody = document.createElement("tbody");
+
+	// Name
+	var row = document.createElement("tr");
+	row.appendChild(blue_td_with_text("Name"))
+	row.appendChild(td_with_text(node.getAttribute("name"), 3))
+	tblBody.appendChild(row)
+
+	// Extends
+	row = document.createElement("tr");
+	row.appendChild(blue_td_with_text("Extends"))
+	row.appendChild(td_with_text(create_type_annotation("Attribute", "MAL/Data/Attribute", null), 3))
+	tblBody.appendChild(row)
+
+	// short form part
+	if (node.getAttribute("shortFormPart")) {
+		var row = document.createElement("tr");
+		row.appendChild(blue_td_with_text("Short Form Part"))
+		row.appendChild(td_with_text(node.getAttribute("shortFormPart"), 3))
+		tblBody.appendChild(row)
+	}
+
+	tbl.appendChild(tblBody);
+	target_div.appendChild(tbl);
+}
+
 function d_mal_composite(node, target_div) {
 	target_div = target_div || div_main
 	var tbl = document.createElement("table");
@@ -576,6 +638,8 @@ drawers["mal:pubsubIP"] = d_mal_ip
 
 drawers["mal:enumeration"] = d_mal_enum
 
+drawers["mal:fundamental"] = d_mal_fundamental
+drawers["mal:attribute"] = d_mal_attribute
 drawers["mal:composite"] = d_mal_composite
 
 drawers["com:objects"] = d_com_objects
