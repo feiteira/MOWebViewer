@@ -247,9 +247,9 @@ function create_type_annotation(type_str, path_str, is_list) {
 	// document, so it uses the post_draw
 	post_draw.push(function() {
 		var t_ann = $("#" + type_annotation.getAttribute("id"))
-		if (tree.nodeMap[path_str]) {
+		if (tree.nodePathMap[path_str]) {
 			t_ann.addClass("link")
-			var xml_node = tree.nodeMap[path_str].xml_node
+			var xml_node = tree.nodePathMap[path_str].xml_node
 
 			t_ann.hover(function() {
 				hoverInToMiniview(xml_node, t_ann)
@@ -259,7 +259,7 @@ function create_type_annotation(type_str, path_str, is_list) {
 
 			t_ann.click(function() {
 				hoverOutOfMiniview(xml_node, t_ann)
-				tree.selectNodeFromPath(path_str)
+				selectNodeFromPath(path_str)
 			})
 		}else{
 		//	t_ann.addClass("error")

@@ -298,7 +298,7 @@ function d_mal_service(node, target_div) {
 
 				jqCell.click(function() {
 					hoverOutOfMiniview(node, jqCell)
-					tree.selectNodeFromPath(node.tree_node.path)
+					selectNodeFromPath(node.tree_node.id)
 				})
 			}
 		}
