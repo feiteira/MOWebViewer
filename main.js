@@ -114,6 +114,16 @@ window.onload = function () {
 			"animation": false, // No animation
 			"data": tree.data
 		},
+		"search": {
+			"fuzzy": false,
+			"show_only_matches": true,
+			"show_only_matches_children": true
+		},
+		"plugins": ["search"]
+	});
+
+	$("#searchbox").on('input', function (e) {
+		$("#div_tree").jstree(true).search($("#searchbox").val());
 	});
 
 	selectNodeFromURL();

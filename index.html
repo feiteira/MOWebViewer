@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" type="text/css" href="moviewer.css">
@@ -12,9 +13,17 @@
 	<script type="text/javascript" src="drawer.js"></script>
 	<script type="text/javascript" src="main.js"></script>
 </head>
+
 <body>
 	<div id="mainContainer">
-		<div id="div_tree"></div>
+		<div id="div_left_panel">
+			<div id="search_parent">
+				<input type="search" id="searchbox" placeholder="Search..." />
+			</div>
+			<div id="div_tree_parent">
+				<div id="div_tree"></div>
+			</div>
+		</div>
 		<div class="verticalSeparator"></div>
 		<div id="div_main"></div>
 		<div id="rightAnchor"></div>
@@ -27,4 +36,5 @@
 	</div>
 	<div id="div_miniview" class="miniview"></div>
 </body>
+
 </html>
