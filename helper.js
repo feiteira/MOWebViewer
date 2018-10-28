@@ -1,7 +1,7 @@
 //DOM patches
-Node.prototype.getAttributeNames = Node.prototype.getAttributeNames || function() {
+Node.prototype.getAttributeNames = Node.prototype.getAttributeNames || function () {
 	var y = this;
-	return Object.keys(y.attributes).map(function(x) {
+	return Object.keys(y.attributes).map(function (x) {
 		return y.attributes[x].name
 	})
 }
@@ -9,7 +9,7 @@ Node.prototype.getAttributeNames = Node.prototype.getAttributeNames || function(
 // DOM Addons
 // index is optional, if < 0 then returns the full array, otherwise, the
 // position in the provided index
-Node.prototype.childrenByTag = function(tag, index) {
+Node.prototype.childrenByTag = function (tag, index) {
 	if (typeof index == 'undefined')
 		index = -1
 	var self = this
@@ -25,7 +25,7 @@ Node.prototype.childrenByTag = function(tag, index) {
 	// if here, then initiate the map
 	self.tagMap = {}
 	var children = $(self).children();
-	children.each(function(c) {
+	children.each(function (c) {
 		self.tagMap[children[c].tagName] = self.tagMap[children[c].tagName] || []
 		self.tagMap[children[c].tagName].push(children[c])
 	})
@@ -34,15 +34,15 @@ Node.prototype.childrenByTag = function(tag, index) {
 	return self.childrenByTag(tag, index)
 }
 
-Node.prototype.isTag = function(tag) {
+Node.prototype.isTag = function (tag) {
 	var self = this
 	return (self.tagName == tag)
 }
 
-Node.prototype.eachTag = function(tag, func) {
+Node.prototype.eachTag = function (tag, func) {
 	var self = this
 	if (self.childrenByTag(tag)) {
-		self.childrenByTag(tag).map(function(n) {
+		self.childrenByTag(tag).map(function (n) {
 			func(n)
 		})
 	}
@@ -53,103 +53,103 @@ Node.prototype.eachTag = function(tag, func) {
 TABLE_COMMENT_LENGTH_LIMIT = 80
 COMMENT_MIN_WORDS = 12
 
-SERVICE_HEADER = [ "Area Identifier", "Service Identifier", "Area Number", "Service Number", "Area Version" ]
+SERVICE_HEADER = ["Area Identifier", "Service Identifier", "Area Number", "Service Number", "Area Version"]
 
-OP_LIST_HEADER = [ "Interaction Pattern", "Operation Identifier", "Operation Number", "Support in Replay",
-		"Capability Set" ]
+OP_LIST_HEADER = ["Interaction Pattern", "Operation Identifier", "Operation Number", "Support in Replay",
+	"Capability Set"]
 
-ENUM_LIST_HEADER = [ "Enumeration Value", "Numerical Value", "Comment" ]
+ENUM_LIST_HEADER = ["Enumeration Value", "Numerical Value", "Comment"]
 
-ERROR_HEADER = [ "Error", "Comment", "Extra Info - Type", "Extra Info - Comment" ]
+ERROR_HEADER = ["Error", "Comment", "Extra Info - Type", "Extra Info - Comment"]
 
-COM_OBJECT_HEADER = [ "Object Name", "Object Number", "Object Body Type", "Related points to", "Source points to" ]
+COM_OBJECT_HEADER = ["Object Name", "Object Number", "Object Body Type", "Related points to", "Source points to"]
 
 LONG_NAMES = {
-	"mal:errors" : "Errors",
+	"mal:errors": "Errors",
 	// interaction patterns
-	"mal:sendIP"		: "Send",
-	"mal:submitIP" : "Submit",
-	"mal:requestIP" : "Request",
-	"mal:invokeIP" : "Invoke",
-	"mal:progressIP" : "Progress",
-	"mal:pubsubIP" : "Pub-Sub",
+	"mal:sendIP": "Send",
+	"mal:submitIP": "Submit",
+	"mal:requestIP": "Request",
+	"mal:invokeIP": "Invoke",
+	"mal:progressIP": "Progress",
+	"mal:pubsubIP": "Pub-Sub",
 	// COM
-	"com:events" : "Events",
-	"com:objects" : "Objects",
+	"com:events": "Events",
+	"com:objects": "Objects",
 	// Others
-	"mal:dataTypes" : "Data",
+	"mal:dataTypes": "Data",
 
 }
 
 MESSAGE_NAMES = {
-	"mal:send" : "Send",
-	"mal:invoke" : "Invoke",
-	"mal:acknowledgement" : "Ack",
-	"mal:response" : "Response",
-	"mal:request" : "Request",
-	"mal:progress" : "Progress",
-	"mal:update" : "Update",
-	"mal:submit" : "Submit",
-	"mal:publishNotify" : "Publish / Notify",
+	"mal:send": "Send",
+	"mal:invoke": "Invoke",
+	"mal:acknowledgement": "Ack",
+	"mal:response": "Response",
+	"mal:request": "Request",
+	"mal:progress": "Progress",
+	"mal:update": "Update",
+	"mal:submit": "Submit",
+	"mal:publishNotify": "Publish / Notify",
 }
 
 IN_OR_OUT = {
-	"mal:invoke" : "IN",
-	"mal:request" : "IN",
-	"mal:progress" : "IN",
-	"mal:submit" : "IN",
+	"mal:invoke": "IN",
+	"mal:request": "IN",
+	"mal:progress": "IN",
+	"mal:submit": "IN",
 
-	"mal:send" : "OUT",
-	"mal:update" : "OUT",
-	"mal:acknowledgement" : "OUT",
-	"mal:response" : "OUT",
-	"mal:publishNotify" : "OUT",
+	"mal:send": "OUT",
+	"mal:update": "OUT",
+	"mal:acknowledgement": "OUT",
+	"mal:response": "OUT",
+	"mal:publishNotify": "OUT",
 }
 
 // these nodes will be processed but skipped from the tree. their children will
 // be the children of these' nodes parents
-OMMITED_NODE_TYPES = [ "mal:specification", "mal:capabilitySet", "mal:documentation", "mal:messages", "com:features",
-		"mal:errorRef", "mal:errors",
-		// "mal:dataTypes",
-		"mal:item", "mal:type", "mal:extends", "mal:field", "mal:extraInformation",
-		// IP related
-		"mal:invoke", "mal:acknowledgement", "mal:response", "mal:request", "mal:progress", "mal:update", "mal:submit",
-		"mal:publishNotify"
-// COM related
- ,"com:object","com:event"
- ,"com:objectType","com:sourceObject","com:relatedObject"
+OMMITED_NODE_TYPES = ["mal:specification", "mal:capabilitySet", "mal:documentation", "mal:messages", "com:features",
+	"mal:errorRef", "mal:errors",
+	// "mal:dataTypes",
+	"mal:item", "mal:type", "mal:extends", "mal:field", "mal:extraInformation",
+	// IP related
+	"mal:invoke", "mal:acknowledgement", "mal:response", "mal:request", "mal:progress", "mal:update", "mal:submit",
+	"mal:publishNotify"
+	// COM related
+	, "com:object", "com:event"
+	, "com:objectType", "com:sourceObject", "com:relatedObject"
 ]
 
-OMMITED_TYPE_NAME_IN_TREE = [ "mal:area", "mal:service", "mal:fundamental", "mal:attribute", "mal:composite", "mal:error", ]
+OMMITED_TYPE_NAME_IN_TREE = ["mal:area", "mal:service", "mal:fundamental", "mal:attribute", "mal:composite", "mal:error",]
 
 TAG_TO_ICON = {
-	"unknown" : "fff/asterisk_yellow.png",
+	"unknown": "fff/asterisk_yellow.png",
 
-	"mal:area" : "fff/report.png",
-	"mal:service" : "fff/page_white_stack.png",
-	"mal:sendIP" : "fff/page_white.png",
-	"mal:requestIP" : "fff/page.png",
-	"mal:submitIP" : "fff/page_green.png",
-	"mal:progressIP" : "fff/page_red.png",
-	"mal:invokeIP" : "fff/page_purple.png",
-	"mal:pubsubIP" : "fff/page_orange.png",
+	"mal:area": "fff/report.png",
+	"mal:service": "fff/page_white_stack.png",
+	"mal:sendIP": "fff/page_white.png",
+	"mal:requestIP": "fff/page.png",
+	"mal:submitIP": "fff/page_green.png",
+	"mal:progressIP": "fff/page_red.png",
+	"mal:invokeIP": "fff/page_purple.png",
+	"mal:pubsubIP": "fff/page_orange.png",
 
-	"mal:errorRef" : "fff/link_error.png",
+	"mal:errorRef": "fff/link_error.png",
 
-	"mal:fundamental" : "fff/tag_blue.png",
-	"mal:attribute" : "fff/tag_green.png",
-	"mal:enumeration" : "fff/tag_red.png",
+	"mal:fundamental": "fff/tag_blue.png",
+	"mal:attribute": "fff/tag_green.png",
+	"mal:enumeration": "fff/tag_red.png",
 
-	"mal:error" : "fff/error.png",
-	"mal:errors" : "fff/page_error.png",
+	"mal:error": "fff/error.png",
+	"mal:errors": "fff/page_error.png",
 
-	"mal:dataTypes" : "fff/bricks.png",
-	"mal:composite" : "fff/brick.png",
+	"mal:dataTypes": "fff/bricks.png",
+	"mal:composite": "fff/brick.png",
 	// COM types
-	"com:events" : "fff/page_bell.png",
-	"com:event" : "fff/bell.png",
-	"com:object" : "fff/database.png",
-	"com:objects" : "fff/page_white_database.png",
+	"com:events": "fff/page_bell.png",
+	"com:event": "fff/bell.png",
+	"com:object": "fff/database.png",
+	"com:objects": "fff/page_white_database.png",
 }
 
 function iconPath(tag) {
@@ -232,10 +232,10 @@ function str_mal_node_type(node, path_prefix) {
 }
 
 function str_mal_type(type, path_prefix) {
-	return str_type(type,path_prefix,"name")
+	return str_type(type, path_prefix, "name")
 }
 function str_com_type(type, path_prefix) {
-	return str_type(type,path_prefix,"number")
+	return str_type(type, path_prefix, "number")
 }
 
 function create_type_annotation(type_str, path_str, is_list) {
@@ -245,24 +245,24 @@ function create_type_annotation(type_str, path_str, is_list) {
 
 	// cannot access here, because the element has not yet been added to the
 	// document, so it uses the post_draw
-	post_draw.push(function() {
+	post_draw.push(function () {
 		var t_ann = $("#" + type_annotation.getAttribute("id"))
 		if (tree.nodePathMap[path_str]) {
 			t_ann.addClass("link")
 			var xml_node = tree.nodePathMap[path_str].xml_node
 
-			t_ann.hover(function() {
+			t_ann.hover(function () {
 				hoverInToMiniview(xml_node, t_ann)
-			}, function() {
+			}, function () {
 				hoverOutOfMiniview(xml_node, t_ann)
 			})
 
-			t_ann.click(function() {
+			t_ann.click(function () {
 				hoverOutOfMiniview(xml_node, t_ann)
 				selectNodeFromPath(path_str)
 			})
-		}else{
-		//	t_ann.addClass("error")
+		} else {
+			//	t_ann.addClass("error")
 		}
 	})
 
@@ -278,7 +278,7 @@ function str_type(type, path_prefix, id_type) {
 	var type_str = ""
 	var path_str = ""
 
-	var appendIf = function(a) {
+	var appendIf = function (a) {
 		if (type.getAttribute(a)) {
 			type_str += type.getAttribute(a) + ":"
 			path_str += type.getAttribute(a) + "/"
@@ -321,8 +321,8 @@ function str_mal_field(node) {
 function comment_management_function(trigger_div_id, comment_div_id, reference_position_div_id, relWidth, relHeight) {
 	relWidth = relWidth || 1
 	relHeight = relHeight || 1
-	return function() {
-		$('#' + trigger_div_id).on("mouseover", function() {
+	return function () {
+		$('#' + trigger_div_id).on("mouseover", function () {
 			var w = Math.trunc($('#' + reference_position_div_id).width() * relWidth)
 			var h = Math.trunc($('#' + reference_position_div_id).height() * relHeight)
 
@@ -330,7 +330,7 @@ function comment_management_function(trigger_div_id, comment_div_id, reference_p
 			$('#' + comment_div_id).css('margin-top', '-' + h + 'px');
 
 			$('#' + comment_div_id).show();
-		}).on("mouseout", function() {
+		}).on("mouseout", function () {
 			$('#' + comment_div_id).hide();
 		});
 	}
@@ -358,7 +358,7 @@ function hoverInToMiniview(node, element) {
 		miniview.hide();
 		// ugly hack.. sometimes the hide is ignored, with this timeout it
 		// retries (if still empty div)
-		setTimeout(function() {
+		setTimeout(function () {
 			if (miniview.html() == "")
 				miniview.hide();
 		}, 500);
@@ -387,10 +387,8 @@ function getUrlParameter(name) {
 	return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 };
 
-// --------------------- AimaraJS extentions ------------------------
-
 function onNodeSelect(tree_node) {
-	var xml_node = tree_node.xml_node
+	var xml_node = tree_node.data.xml_node
 	div_main.innerHTML = ""
 
 	// this variable will contain a list of function to be executed after the
@@ -402,9 +400,9 @@ function onNodeSelect(tree_node) {
 		drawer_func = drawers["default"]
 
 	var nodePath = getUrlParameter("u");
-	if (typeof nodePath !== "undefined" && nodePath !== tree_node.path) {
+	if (typeof nodePath !== "undefined" && nodePath !== tree_node.data.path) {
 		var stateObj = {};
-		history.pushState(stateObj, tree_node.path, "?u=" + tree_node.path);
+		history.pushState(stateObj, tree_node.data.path, "?u=" + tree_node.data.path);
 	}
 
 	drawer_func(xml_node);

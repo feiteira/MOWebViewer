@@ -99,22 +99,22 @@ function d_mal_composite(node, target_div) {
 
 	// fields
 	if (node.childrenByTag("mal:field")) {
-		var header_row = tableRow([ "Field", "Type", "Nullable", "Comment" ]);
+		var header_row = tableRow(["Field", "Type", "Nullable", "Comment"]);
 		header_row.setAttribute("class", "blue_bg");
 		tblBody.appendChild(header_row)
 
 		node.childrenByTag("mal:field").map(
-				function(f) {
-					row = document.createElement("tr");
-					row.appendChild(td_with_text(f.getAttribute("name")))
-					row.appendChild(td_with_text(str_mal_node_type(f)))
-					row.appendChild(td_with_text(f.getAttribute("canBeNull") == "true"
-							|| f.getAttribute("canBeNull") == null ? "Yes" : "No"))
-					var tdl = td_with_text(f.getAttribute("comment"));
-					tdl.style.textAlign = "left";
-					row.appendChild(tdl)
-					tblBody.appendChild(row)
-				})
+			function (f) {
+				row = document.createElement("tr");
+				row.appendChild(td_with_text(f.getAttribute("name")))
+				row.appendChild(td_with_text(str_mal_node_type(f)))
+				row.appendChild(td_with_text(f.getAttribute("canBeNull") == "true"
+					|| f.getAttribute("canBeNull") == null ? "Yes" : "No"))
+				var tdl = td_with_text(f.getAttribute("comment"));
+				tdl.style.textAlign = "left";
+				row.appendChild(tdl)
+				tblBody.appendChild(row)
+			})
 	}
 
 	tbl.appendChild(tblBody);
@@ -136,9 +136,9 @@ function d_mal_ip(node, target_div) {
 	tblBody.appendChild(row)
 
 	// messages, assumes only one message entry
-	node.eachTag("mal:messages", function(msg) {
+	node.eachTag("mal:messages", function (msg) {
 		var msgChildren = $(msg).children()
-		msgChildren.each(function(c) {
+		msgChildren.each(function (c) {
 			tblBody.appendChild(tr_mal_message(msgChildren[c]))
 		})
 	})
@@ -214,7 +214,7 @@ function tr_mal_message(node, target_div, unique_sufix) {
 	}
 
 	// only a field not the type
-	node.eachTag("mal:type", function(type) {
+	node.eachTag("mal:type", function (type) {
 		var li = document.createElement("li");
 		li.innerHTML = str_mal_type(type)
 		ul.appendChild(li)
@@ -241,11 +241,11 @@ function d_mal_service(node, target_div) {
 
 	out = node
 	tblBody.appendChild(tableRow([//
-	area.getAttribute("name"), // area identifier
-	node.getAttribute("name"), // service identifier
-	area.getAttribute("number"), // area number
-	node.getAttribute("number"), // service number
-	area.getAttribute("version") // area version
+		area.getAttribute("name"), // area identifier
+		node.getAttribute("name"), // service identifier
+		area.getAttribute("number"), // area number
+		node.getAttribute("number"), // service number
+		area.getAttribute("version") // area version
 	]))
 
 	// -------------------- second blue header ------------------
@@ -256,9 +256,9 @@ function d_mal_service(node, target_div) {
 	// ---------------------- operations -------------------------
 	var operations = []
 	// list of operations independently of capability set
-	node.eachTag("mal:capabilitySet", function(cs) {
+	node.eachTag("mal:capabilitySet", function (cs) {
 		var csChildren = $(cs).children();
-		csChildren.each(function(idx) {
+		csChildren.each(function (idx) {
 			var ip = csChildren[idx]
 			if (typeof ip != 'undefined') {
 				// updates list of all operations on parent node
@@ -274,10 +274,10 @@ function d_mal_service(node, target_div) {
 		op = operations[opi]
 
 		var tRow = tableRow([//
-		LONG_NAMES[op[0].tagName],//
-		op[0].getAttribute("name"),//
-		op[0].getAttribute("number"), // area
-		op[0].getAttribute("supportInReplay"), op[0].parentNode.getAttribute("number") ])
+			LONG_NAMES[op[0].tagName],//
+			op[0].getAttribute("name"),//
+			op[0].getAttribute("number"), // area
+			op[0].getAttribute("supportInReplay"), op[0].parentNode.getAttribute("number")])
 
 		// add link to the operation
 		var operationCell = tRow.cells[1]
@@ -287,18 +287,18 @@ function d_mal_service(node, target_div) {
 
 		// on hover of the cell, show mini view of the operation
 		// on click, go there
-		postDrawCell = function(node, cell) {
-			return function() {
+		postDrawCell = function (node, cell) {
+			return function () {
 				var jqCell = $("#" + cell.getAttribute("id"))
-				jqCell.hover(function() {
+				jqCell.hover(function () {
 					hoverInToMiniview(node, jqCell)
-				}, function() {
+				}, function () {
 					hoverOutOfMiniview(node, jqCell)
 				})
 
-				jqCell.click(function() {
+				jqCell.click(function () {
 					hoverOutOfMiniview(node, jqCell)
-					selectNodeFromPath(node.tree_node.id)
+					selectNodeFromPath(node.tree_node.data.path)
 				})
 			}
 		}
@@ -368,11 +368,11 @@ function d_mal_enum(node, target_div) {
 	target_div.appendChild(tbl);
 }
 
-function d_com_events(node, target_div,object_tag = "com:event") {
-	d_com_objects(node, target_div,object_tag);
+function d_com_events(node, target_div, object_tag = "com:event") {
+	d_com_objects(node, target_div, object_tag);
 }
 
-function d_com_objects(node, target_div,object_tag = "com:object") {
+function d_com_objects(node, target_div, object_tag = "com:object") {
 	target_div = target_div || div_main
 
 	var tbl = document.createElement("table");
@@ -384,7 +384,7 @@ function d_com_objects(node, target_div,object_tag = "com:object") {
 
 	var row
 
-	node.eachTag(object_tag, function(obj) {
+	node.eachTag(object_tag, function (obj) {
 		row = document.createElement("tr");
 		row.appendChild(td_with_text(obj.getAttribute("name")))
 		row.appendChild(td_with_text(obj.getAttribute("number")))
@@ -399,14 +399,14 @@ function d_com_objects(node, target_div,object_tag = "com:object") {
 		row.appendChild(td_with_text(obj_body_type))
 
 		// related & source
-		var handle_obj_ref = function(typeTag) {
-			console.info(this)
-			console.info(typeTag)
+		var handle_obj_ref = function (typeTag) {
+			//console.info(this)
+			//console.info(typeTag)
 
 			var refText
 			if (this.childrenByTag(typeTag)) {
 				var objType = this.childrenByTag(typeTag)[0].childrenByTag("com:objectType")
-				// there is a defind type
+				// there is a defined type
 				if (objType) {
 					refText = str_com_type(objType[0])
 				} else {
@@ -444,7 +444,7 @@ function draw_table(node, target_div) {
 		keys.splice(index, 1)
 	}
 
-	var elements = keys.map(function(k) {
+	var elements = keys.map(function (k) {
 		return node.getAttribute(k)
 	})
 
@@ -507,7 +507,7 @@ function draw_errors(node, target_div) {
 		header_row.setAttribute("class", "blue_bg");
 		tblBody.appendChild(header_row)
 
-		errorsNode.eachTag("mal:errorRef", function(err) {
+		errorsNode.eachTag("mal:errorRef", function (err) {
 			// errors
 			tblBody.appendChild(tr_errorRef(err))
 		})
@@ -521,7 +521,7 @@ function draw_errors(node, target_div) {
 function draw_documentation(node, target_div) {
 	target_div = target_div || div_main
 	// ------------------ Documents ---------------------
-	node.eachTag("mal:documentation", function(doc) {
+	node.eachTag("mal:documentation", function (doc) {
 		var h2 = document.createElement("h2");
 		h2.innerHTML = doc.getAttribute("name")
 		target_div.appendChild(h2);
@@ -613,7 +613,7 @@ function draw_comments(node, target_div) {
 	}
 
 	var note_counter = 1
-	node.eachTag("mal:extraInformation", function(ei) {
+	node.eachTag("mal:extraInformation", function (ei) {
 		var h3 = document.createElement("h3");
 		h3.innerHTML = "Note " + note_counter;
 

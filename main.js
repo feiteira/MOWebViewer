@@ -1,5 +1,5 @@
-//counter = 0
-function mo_parse(node, lvl, parent_tree_node) {
+// Recursively generate a jsTree node structure from a given XML node
+function mo_parse(xml_node, lvl, parent_tree_node) {
 	lvl = lvl || 0
 	parent_tree_node = parent_tree_node || null
 	// String.prototype.repeat() is not used below for IE compatibility
@@ -8,48 +8,48 @@ function mo_parse(node, lvl, parent_tree_node) {
 		prfx += ". "
 	}
 
-	// should always be true, but just in case, for each node entry
-	if (node.length > 0) node.map(function (attr_pos) {
-		// skip from the tree
-		// Array.prototype.includes() is not used below for IE compatibility
-		if (OMMITED_NODE_TYPES.indexOf(node[attr_pos].tagName) === -1) {
-			var node_name = treeElementName(node[attr_pos])
-			var new_node = {
-				"text": node_name,
-				"children": [],
-				"icon": iconPath(node[attr_pos].tagName),
-				"id": parent_tree_node == null ? node_name : (parent_tree_node.id + "_" + node_name),
-				"path": parent_tree_node == null ? node_name : (parent_tree_node.path + "/" + node_name)
+	// skip ommited node types
+	// Array.prototype.includes() is not used below for IE compatibility
+	if (OMMITED_NODE_TYPES.indexOf(xml_node.tagName) === -1) {
+		var display_name = treeElementName(xml_node)
+		var new_tree_node = {
+			"text": display_name,
+			"children": [],
+			"icon": iconPath(xml_node.tagName),
+			"id": parent_tree_node == null ? display_name : (parent_tree_node.id + "_" + display_name),
+			"data": {
+				"path": parent_tree_node == null ? display_name : (parent_tree_node.data.path + "/" + display_name),
+				"xml_node": xml_node
 			}
-			if (parent_tree_node == null) {
-				tree.data.push(new_node)
-			} else {
-				parent_tree_node.children.push(new_node)
-			}
-
-			new_node.xml_node = node[attr_pos]
-			new_node.xml_node.tree_node = new_node // points back to tree
-			tree.nameMap[name] = new_node
-			tree.nodePathMap[new_node.path] = new_node
-
-			parent_tree_node = new_node
 		}
-	})
-
-	node.children().each(function () {
-		var xml_node = $(this)[0]
-		if (xml_node.isTag("mal:area")) {
-			xml_node.area = xml_node.getAttribute("name")
+		if (parent_tree_node == null) {
+			tree.data.push(new_tree_node)
+		} else {
+			parent_tree_node.children.push(new_tree_node)
 		}
-		xml_node.area = xml_node.area || xml_node.parentNode.area
 
-		if (xml_node.isTag("mal:service")) {
-			xml_node.service = xml_node.getAttribute("name")
+		xml_node.tree_node = new_tree_node // link the XML tree node to jsTree node
+		tree.nameMap[name] = new_tree_node
+		tree.nodePathMap[new_tree_node.data.path] = new_tree_node
+
+		parent_tree_node = new_tree_node
+	}
+
+	for (var i = 0; i < xml_node.children.length; ++i) {
+		var child = xml_node.children[i]
+		// Populate Area and Service members and propagate them recursively
+		if (child.isTag("mal:area")) {
+			child.area = child.getAttribute("name")
 		}
-		xml_node.service = xml_node.service || xml_node.parentNode.service
+		child.area = child.area || child.parentNode.area
 
-		mo_parse($(this), lvl + 1, parent_tree_node)
-	})
+		if (child.isTag("mal:service")) {
+			child.service = child.getAttribute("name")
+		}
+		child.service = child.service || child.parentNode.service
+
+		mo_parse(child, lvl + 1, parent_tree_node)
+	}
 }
 
 function processXMLFile(filepath) {
@@ -57,7 +57,7 @@ function processXMLFile(filepath) {
 	jQuery.ajaxSetup({ async: false });
 
 	$.get(filepath, function (d) {
-		mo_parse($(d.documentElement))
+		mo_parse(d.documentElement)
 	})
 }
 
@@ -83,15 +83,15 @@ function selectNodeFromPath(p_node_path) {
 }
 
 function onHoverHandler(event, data) {
-	hoverInToMiniview(data.node.original.xml_node, $("#" + data.node.a_attr.id))
+	hoverInToMiniview(data.node.data.xml_node, $("#" + data.node.a_attr.id))
 }
 
 function onDehoverHandler(event, data) {
-	hoverOutOfMiniview(data.node.original.xml_node, $("#" + data.node.a_attr.id))
+	hoverOutOfMiniview(data.node.data.xml_node, $("#" + data.node.a_attr.id))
 }
 
 function onSelectHandler(event, data) {
-	onNodeSelect(data.node.original)
+	onNodeSelect(data.node)
 }
 
 window.onload = function () {
