@@ -249,7 +249,7 @@ function create_type_annotation(type_str, path_str, is_list) {
 		var t_ann = $("#" + type_annotation.getAttribute("id"))
 		if (tree.nodePathMap[path_str]) {
 			t_ann.addClass("link")
-			var xml_node = tree.nodePathMap[path_str].xml_node
+			var xml_node = tree.nodePathMap[path_str].data.xml_node
 
 			t_ann.hover(function () {
 				hoverInToMiniview(xml_node, t_ann)

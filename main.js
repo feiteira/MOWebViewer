@@ -103,7 +103,7 @@ window.onload = function () {
 	$("#div_tree").on("select_node.jstree", onSelectHandler)
 
 	tree = {}
-	tree.nodePathMap = {}
+	tree.nodePathMap = []
 	tree.nameMap = {}
 	tree.data = []
 	loadMoSpecs();
