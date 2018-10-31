@@ -368,11 +368,13 @@ function d_mal_enum(node, target_div) {
 	target_div.appendChild(tbl);
 }
 
-function d_com_events(node, target_div, object_tag = "com:event") {
+function d_com_events(node, target_div, object_tag) {
+	object_tag = object_tag || "com:event"
 	d_com_objects(node, target_div, object_tag);
 }
 
-function d_com_objects(node, target_div, object_tag = "com:object") {
+function d_com_objects(node, target_div, object_tag) {
+	object_tag = object_tag || "com:object"
 	target_div = target_div || div_main
 
 	var tbl = document.createElement("table");

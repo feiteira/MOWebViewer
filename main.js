@@ -35,20 +35,23 @@ function mo_parse(xml_node, lvl, parent_tree_node) {
 		parent_tree_node = new_tree_node
 	}
 
-	for (var i = 0; i < xml_node.children.length; ++i) {
-		var child = xml_node.children[i]
-		// Populate Area and Service members and propagate them recursively
-		if (child.isTag("mal:area")) {
-			child.area = child.getAttribute("name")
-		}
-		child.area = child.area || child.parentNode.area
+	// Cannot iterate over Element.children for IE compatibility
+	for (var i = 0; i < xml_node.childNodes.length; ++i) {
+		var child = xml_node.childNodes[i]
+		if (child instanceof Element) {
+			// Populate Area and Service members and propagate them recursively
+			if (child.isTag("mal:area")) {
+				child.area = child.getAttribute("name")
+			}
+			child.area = child.area || child.parentNode.area
 
-		if (child.isTag("mal:service")) {
-			child.service = child.getAttribute("name")
-		}
-		child.service = child.service || child.parentNode.service
+			if (child.isTag("mal:service")) {
+				child.service = child.getAttribute("name")
+			}
+			child.service = child.service || child.parentNode.service
 
-		mo_parse(child, lvl + 1, parent_tree_node)
+			mo_parse(child, lvl + 1, parent_tree_node)
+		}
 	}
 }
 
