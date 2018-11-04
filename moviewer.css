@@ -47,7 +47,7 @@ ul {
 
 
 #div_left_panel {
-	width: 33%;
+	width: 20%;
 	height: 100%;
 	float: left;
 	overflow: auto;
@@ -81,7 +81,8 @@ ul {
 .verticalSeparator {
 	float: left;
 	height: 100%;
-	width: 0.3%;
+	width: 0.5%;
+	cursor: pointer;
 	background-color: #A0A0A0;
 }
 
