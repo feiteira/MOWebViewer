@@ -205,7 +205,7 @@ function tr_mal_message(node, target_div, unique_sufix) {
 			elem_name.setAttribute("class", "note");
 
 			comment_div.setAttribute("class", "comment");
-			comment_div.innerHTML = field.getAttribute("comment")
+			comment_div.innerHTML = format_line_breaks(field.getAttribute("comment"))
 			li.appendChild(comment_div)
 
 			post_draw.push(comment_management_function(elem_name_div_id, comment_div_id, comment_li_id))
@@ -590,7 +590,7 @@ function td_table_comment(full_comment, unique_sufix) {
 	shown_comment_a.setAttribute("class", "note");
 
 	shown_comment_a.innerHTML = shortComment
-	hidden_comment_div.innerHTML = full_comment
+	hidden_comment_div.innerHTML = format_line_breaks(full_comment)
 
 	var td = td_with_element(shown_comment_a)
 	var td_id = "td_" + unique_sufix
@@ -611,7 +611,7 @@ function draw_comments(node, target_div) {
 		h2.innerHTML = "Comment";
 
 		target_div.appendChild(h2);
-		target_div.innerHTML += comment + "<br/>";
+		target_div.innerHTML += format_line_breaks(comment) + "<br/>";
 	}
 
 	var note_counter = 1
@@ -620,7 +620,7 @@ function draw_comments(node, target_div) {
 		h3.innerHTML = "Note " + note_counter;
 
 		target_div.appendChild(h3);
-		target_div.innerHTML += ei.getAttribute("comment") + "<br/>";
+		target_div.innerHTML += format_line_breaks(ei.getAttribute("comment")) + "<br/>";
 		note_counter++
 	})
 }

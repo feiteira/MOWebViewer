@@ -196,6 +196,10 @@ function treeElementName(element) {
 	return name
 }
 
+function format_line_breaks(text) {
+	return text.replace(/\n/g, "\n<br/>")
+}
+
 // ------------------ Table helpers ----------------------
 
 function td_with_element(elem) {
@@ -207,7 +211,7 @@ function td_with_element(elem) {
 function td_with_text(text, span) {
 	span = span || 1
 	var cell = document.createElement("td");
-	cell.innerHTML = text.replace(/\n/g, "\n<br/>")
+	cell.innerHTML = format_line_breaks(text)
 	if (span > 1)
 		cell.setAttribute("colspan", span)
 	return cell
