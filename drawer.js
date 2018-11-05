@@ -453,13 +453,6 @@ function draw_table(node, target_div) {
 	// no table to be shown
 	if (elements.length == 0) {
 		return
-
-
-
-
-
-
-
 	}
 
 	var tbl = document.createElement("table");
@@ -483,13 +476,6 @@ function draw_errors(node, target_div) {
 	// check if errors entry exists, if not, then exit
 	if (node.childrenByTag("mal:errors", 0) == null) {
 		return
-
-
-
-
-
-
-
 	}
 
 	// assumes only one entry
