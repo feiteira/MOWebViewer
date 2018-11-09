@@ -82,8 +82,13 @@ ul {
 	float: left;
 	height: 100%;
 	width: 0.5%;
-	cursor: pointer;
+	cursor: ew-resize;
 	background-color: #A0A0A0;
+}
+
+.verticalSeparator:hover {
+	cursor: ew-resize;
+	background-color: #B0B0B0;
 }
 
 #div_main {
