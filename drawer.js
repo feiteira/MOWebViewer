@@ -611,6 +611,15 @@ function draw_comments(node, target_div) {
 	})
 }
 
+function d_pdf(node, target_div) {
+	target_div = target_div || div_main
+
+//	target_div.innerHTML = node.tagName
+	var pdframe = document.createElement("iframe");
+	pdframe.setAttribute("src",node.pdfInfo.pdfFilePath);
+	target_div.appendChild(pdframe);
+}
+
 drawers = {}
 drawers["default"] = default_drawer
 
@@ -632,3 +641,6 @@ drawers["mal:composite"] = d_mal_composite
 
 drawers["com:objects"] = d_com_objects
 drawers["com:events"] = d_com_events
+
+
+drawers["book"] = d_pdf

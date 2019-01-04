@@ -150,6 +150,10 @@ TAG_TO_ICON = {
 	"com:event": "fff/bell.png",
 	"com:object": "fff/database.png",
 	"com:objects": "fff/page_white_database.png",
+
+	//pdf
+	"book": "fff/book.png",
+	"book_red": "fff/book_red.png",
 }
 
 function iconPath(tag) {
