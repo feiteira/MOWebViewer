@@ -27,26 +27,32 @@ function mo_parse(xml_node, lvl, parent_tree_node) {
 		if (parent_tree_node == null) {
 			tree.data.push(new_tree_node)
 
-			//if the book is available as a PDF file
-			if(configServiceBookFiles[new_tree_node.text]){
-				// then create a book entry
-				var pdf = configServiceBookFiles[new_tree_node.text]
-				console.info(new_tree_node.text);
-				var pdf_tree_node = {
-					"text": pdf.name,
-					"children": [],
-					"icon": iconPath(pdf.icon),
-					"id": new_tree_node.id + "_" + display_name,
-					"data": {
-						"path": parent_tree_node == null ? display_name : new_tree_node.data.path + "/" + display_name,
-						//creates a fake XML node
-						"xml_node": {
-							tagName:"book",
-							pdfInfo: pdf
+			if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1))
+			{
+				//IE is not supported				
+			}else
+			{
+				//if the book is available as a PDF file
+				if(configServiceBookFiles[new_tree_node.text]){
+					// then create a book entry
+					var pdf = configServiceBookFiles[new_tree_node.text]
+					console.info(new_tree_node.text);
+					var pdf_tree_node = {
+						"text": pdf.name,
+						"children": [],
+						"icon": iconPath(pdf.icon),
+						"id": new_tree_node.id + "_" + display_name,
+						"data": {
+							"path": parent_tree_node == null ? display_name : new_tree_node.data.path + "/" + display_name,
+							//creates a fake XML node
+							"xml_node": {
+								tagName:"book",
+								pdfInfo: pdf
+							}
 						}
 					}
+					new_tree_node.children.push(pdf_tree_node)
 				}
-				new_tree_node.children.push(pdf_tree_node)
 			}
 		} else {
 			parent_tree_node.children.push(new_tree_node)
