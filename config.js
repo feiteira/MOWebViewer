@@ -12,6 +12,8 @@ var configServiceDefFiles = [
 	"xml/ServiceDefCOM.xml",
 	"xml/ServiceDefMC.xml",
 	"xml/ServiceDefCommon.xml",
+	"xml/ServiceDefFMS.xml",
+	"xml/ServiceDefMDP.xml",
 ];
 
 var configServiceBookFiles = {
