@@ -91,7 +91,7 @@ function processXMLFile(filepath) {
 
 	$.get(filepath, function (d) {
 		mo_parse(d.documentElement)
-	})
+	}, "xml")
 }
 
 function loadMoSpecs() {
@@ -110,6 +110,7 @@ function selectNodeFromURL() {
 function selectNodeFromPath(p_node_path) {
 	var tmp_node = tree.nodePathMap[p_node_path];
 	if (tmp_node != null) {
+		$("#div_tree").jstree("deselect_all");
 		$("#div_tree").jstree("select_node", tmp_node.id);
 		$("#div_tree").jstree("open_node", tmp_node.id);
 	}
