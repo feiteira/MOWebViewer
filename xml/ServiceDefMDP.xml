@@ -3,7 +3,7 @@
 
 	<mal:area name="MDP" number="51" version="1" comment="CCSDS Mission Data Product services">
 	
-		<mal:service xsi:type="com:ExtendedServiceType" name="Data" number="1" 
+		<mal:service xsi:type="com:ExtendedServiceType" name="DataProduct" number="1" 
 		comment="">
 		
 			<mal:capabilitySet number="1">
